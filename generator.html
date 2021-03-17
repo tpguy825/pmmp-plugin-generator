@@ -1,9 +1,50 @@
-<title>Plugin Generator by tpguy825</title>
-<h2>Plugin Generator</h2>
+<title>Basic Plugin Generator by tpguy825</title>
+<h2>Basic Plugin Generator</h2>
 <p>Welcome! Please fill out some details for the generator.</p>
 <form>
   <label for="author">Plugin Author:</label><br>
   <input type="text" id="author" name="author"><br>
+  
   <label for="name">Plugin Name:</label><br>
   <input type="text" id="name" name="name">
+  
+  <label for="command">Command (that the user can run, no spaces): /</label><br>
+  <input type="text" id="command" name="command"><br>
+  
+  <label for="response">Response to be sent to the user (use \n for new line): </label><br>
+  <input type="text" id="response" name="response">
 </form>
+
+<?php
+function test_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
+$name = test_input($_POST["name"]);
+$author = test_input($_POST["author"]);
+$command = test_input($_POST["command"]);
+$response = test_input($_POST["response"]);
+$nameVar = var_export($name, true);
+$pluginYMLcontent = '# do not delete name, main, version or api or your plugin will crash\nname: ' . $name . '\nmain: ' . $name . \Main\nversion: 1.0.0\napi: 3.0.0\n\ncommands:\n ' . $command . ':\n  description: ' . $command . ' command\n  usage: "/' . $command . '"\n  permission: '. name . '.command.' . $command . '\npermissions:\n ' . $name . '.command.' $command . ':\n  description: "Allows the user to run the ' . $command . ' command"\n  default: ' . $defaultPermissionLevel
+file_add_contents('pligin.yml', $pluginYMLcontent);
+$mainPHPcontent = '
+
+<?php
+
+declare(strict_types=1);
+
+namespace ExamplePlugin;
+
+use pocketmine\command\Command;
+use pocketmine\command\CommandSender;
+use pocketmine\plugin\PluginBase;
+use pocketmine\utils\TextFormat;
+
+class MainClass extends PluginBase{
+
+	public function onLoad() : void{
+		$this->getLogger()->info(TextFormat::WHITE . "Loaded");\n}\n\n	public function onEnable() : void{\n		$this->getLogger()->info(TextFormat::DARK_GREEN . "Enabled.");\n	}\n\n	public function onDisable() : void{\n		$this->getLogger()->info(TextFormat::AQUA . "Disabled.");\n	}\n\n public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool{\n		switch($command->getName()){\n			case "' . $command . ":\n				$sender->sendMessage("' . $response . '");\n\n				return true;\n		}\n	}\n}'
+
+?>
