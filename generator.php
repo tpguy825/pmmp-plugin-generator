@@ -42,4 +42,4 @@ if ($zip->open($zipFileName, ZipArchive::CREATE) === TRUE)
     $zip->close();
 }
 ?>
-<p>When you have filled out the form, click <a href="<?php echo $zipFileName; ?>" download>here</a> to download your plugin's base files. Make sure you have <a href="https://poggit.pmmp.io/p/devtools" rel="_blank">DevTools</a> installed!</p>
+<p>When you have filled out the form, click <a href=<?php echo '"' . $zipFileName . '"'; ?> download>here</a> to download your plugin's base files. Make sure you have <a href="https://poggit.pmmp.io/p/devtools" rel="_blank">DevTools</a> installed!</p>
